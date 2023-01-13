@@ -19,6 +19,30 @@ This repository is implementation of the ["Accelerating the Super-Resolution Con
 
 ## Train
 
+Customer dataset:
+
+91-images is not enough, so I modified the dataset class to accept more images.
+Use the H5Dataset to replace original dataset. Prepare the new dataset with code in h5dataset.py:
+
+<pre><code>
+if __name__ == "__main__":
+    h5=H5Dataset("dataset/train_div2k_x3.h5", batch=1024)
+    h5.prepare("d:/AI/dataset/DIV2K/images")
+</code></pre>
+
+I use DIV2K and Flicker2K, put all images in DIV2K/Images and run h5.prepare. And put the "dataset/train_div2k_x3.h5" as dataset path or train.py.
+
+The result with customer dataset is:
+<pre><code>
+PSNR: 38.15837097167969, time=0.013409852981567383
+</code></pre>
+
+Not bad!!!
+
+===============================================
+
+Orignal train process:
+
 The 91-image, Set5 dataset converted to HDF5 can be downloaded from the links below.
 
 | Dataset | Scale | Type | Link |

@@ -2,6 +2,6 @@
 .idea
 data/*_x3_*
 data/*_x3.*
-weights/*
+weights/x3/epoch_*.pth
 *.pyc
 *.h5
