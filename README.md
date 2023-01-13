@@ -21,8 +21,7 @@ This repository is implementation of the ["Accelerating the Super-Resolution Con
 
 Customer dataset:
 
-91-images is not enough, so I modified the dataset class to accept more images.
-Use the H5Dataset to replace original dataset. Prepare the new dataset with code in h5dataset.py:
+91-images dataset is not enough, so I modified add H5Dataset to train on more images. Prepare the new dataset with code in h5dataset.py:
 
 <pre><code>
 if __name__ == "__main__":
@@ -37,7 +36,7 @@ The result with customer dataset is:
 PSNR: 38.15837097167969, time=0.013409852981567383
 </code></pre>
 
-Not bad!!!
+Not bad.
 
 ===============================================
 
