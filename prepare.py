@@ -77,7 +77,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--images-dir', type=str, required=True)
     parser.add_argument('--output-path', type=str, required=True)
-    parser.add_argument('--scale', type=int, default=2)
+    parser.add_argument('--scale', type=int, default=3)
     parser.add_argument('--with-aug', action='store_true')
     parser.add_argument('--eval', action='store_true')
     args = parser.parse_args()

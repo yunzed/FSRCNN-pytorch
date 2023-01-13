@@ -1,4 +1,5 @@
 import argparse
+import time
 
 import torch
 import torch.backends.cudnn as cudnn
@@ -11,7 +12,7 @@ from utils import convert_ycbcr_to_rgb, preprocess, calc_psnr
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights-file', type=str, required=True)
+    parser.add_argument('--weights-file', type=str, default="./weights/x3/latest.pth")
     parser.add_argument('--image-file', type=str, required=True)
     parser.add_argument('--scale', type=int, default=3)
     args = parser.parse_args()
@@ -38,21 +39,24 @@ if __name__ == '__main__':
     hr = image.resize((image_width, image_height), resample=pil_image.BICUBIC)
     lr = hr.resize((hr.width // args.scale, hr.height // args.scale), resample=pil_image.BICUBIC)
     bicubic = lr.resize((lr.width * args.scale, lr.height * args.scale), resample=pil_image.BICUBIC)
-    bicubic.save(args.image_file.replace('.', '_bicubic_x{}.'.format(args.scale)))
+
+    bicubic_file=args.image_file.replace('.', '_x{}.'.format(args.scale))
+    bicubic.save(bicubic_file)
 
     lr, _ = preprocess(lr, device)
     hr, _ = preprocess(hr, device)
     _, ycbcr = preprocess(bicubic, device)
 
+    t1=time.time()
     with torch.no_grad():
         preds = model(lr).clamp(0.0, 1.0)
-
+    t2=time.time()
     psnr = calc_psnr(hr, preds)
-    print('PSNR: {:.2f}'.format(psnr))
+    print(f'PSNR: {psnr}, time={t2-t1}')
 
     preds = preds.mul(255.0).cpu().numpy().squeeze(0).squeeze(0)
 
     output = np.array([preds, ycbcr[..., 1], ycbcr[..., 2]]).transpose([1, 2, 0])
     output = np.clip(convert_ycbcr_to_rgb(output), 0.0, 255.0).astype(np.uint8)
     output = pil_image.fromarray(output)
-    output.save(args.image_file.replace('.', '_fsrcnn_x{}.'.format(args.scale)))
+    output.save(args.image_file.replace('.', '_x{}_sr.'.format(args.scale)))

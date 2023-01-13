@@ -1,2 +1,7 @@
 .DS_Store
 .idea
+data/*_x3_*
+data/*_x3.*
+weights/*
+*.pyc
+*.h5
